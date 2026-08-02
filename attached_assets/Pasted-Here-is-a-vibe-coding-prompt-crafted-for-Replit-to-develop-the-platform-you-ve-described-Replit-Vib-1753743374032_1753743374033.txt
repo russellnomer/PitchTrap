@@ -1,0 +1,27 @@
+Here is a vibe coding prompt crafted for Replit to develop the platform you've described.
+Replit Vibe Coding Prompt
+Vibe: It's a rainy Monday evening in Levittown, 2025. You're a solo dev, tired of the endless stream of predatory business loan spam that plagues every small business owner. Tonight, you fight back. You're not just building an app; you're forging a digital sentinel, a mischievous AI agent designed to waste the time of scammers. The code should be clean, the logic sharp, and the attitude slightly rebellious. Let's call it Project Annoyance Automator.
+Prompt:
+You are a senior Python developer and AI integration specialist. Your task is to architect and begin coding Project Annoyance Automator, a Flask application that automates responses to unsolicited business loan offers.
+The system will have two core components:
+ * The Triage Engine: A classification system that ingests text (from emails or SMS) and categorizes offers as "Ugly," "Bad," or "Good."
+ * The Engagement Bot: A voice-based chatbot that activates for "Bad" offers, engaging the salesperson with a relentless script of pointed questions designed to waste their time and expose their business model.
+Use the following Master Playbook as the foundational logic for the entire system.
+[Master Playbook]
+ * (Here you would paste the entire text you provided, from "Part 1: Sorting the Good, the Bad, and the Ugly..." through "...difficult for the predatory actors who are wasting your time.")
+Your Task:
+Generate the initial project structure and key code modules for a Replit environment. The output should be a comprehensive README.md file that outlines the plan.
+README.md Requirements:
+ * Project Overview: A brief, stylized description of "Project Annoyance Automator."
+ * Tech Stack: List the proposed Python libraries and external APIs.
+   * Framework: Flask
+   * AI/NLP: transformers library for local classification, or an API like OpenAI for more advanced logic.
+   * Telephony: Twilio API for call handling (receiving calls, making outbound calls).
+   * Voice Synthesis: An expressive TTS API (like ElevenLabs or Play.ht) to give the bot a realistic, slightly pedantic voice.
+ * File Structure: Lay out the directories and Python files (app.py, triage.py, bot_logic.py, templates/).
+ * Core Module Snippets: Provide starter code for the key functions.
+   * triage.py: A Python function classify_offer(text) that takes offer text and returns "Good", "Bad", or "Ugly" based on keywords and patterns from the Master Playbook.
+   * bot_logic.py: A function generate_bot_question(call_state) that iterates through the "Level 2: The 'Waste Their Time' Playbook" questions. The function should manage the conversation state to ask questions in sequence.
+   * app.py: A basic Flask route @app.route('/incoming_call', methods=['POST']) that uses Twilio's TwiML to handle a call, convert speech-to-text, pass the text to the bot_logic module, and respond using the TTS generated voice.
+ * Setup & Deployment: List the necessary environment variables (API keys) and give a one-line command to run the app in Replit.
+Let's build the automated gatekeeper every small business deserves. Generate the README.md.
