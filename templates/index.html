@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PitchTrap — Digital Sentinel for Small Business</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .hero {
+      padding: 96px 0 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      right: -200px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(240,160,0,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-headline {
+      max-width: 640px;
+    }
+    .hero-sub {
+      max-width: 520px;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      margin-top: 16px;
+      line-height: 1.7;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 36px;
+      flex-wrap: wrap;
+    }
+    .feature-grid {
+      padding: 64px 0;
+      border-top: 1px solid var(--border);
+    }
+    .feature-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 12px;
+    }
+    .feature-intro {
+      max-width: 440px;
+      color: var(--text-secondary);
+      margin-top: 10px;
+      font-size: 0.95rem;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      transition: border-color 200ms var(--ease-out), transform 200ms var(--ease-out);
+    }
+    .feature-card:hover {
+      border-color: var(--border-light);
+      transform: translateY(-2px);
+    }
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--amber-glow);
+      border: 1px solid rgba(240,160,0,.2);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+    .feature-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .feature-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+    .stat-row {
+      padding: 48px 0;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .stat {
+      background: var(--surface);
+      padding: 28px 32px;
+    }
+    .stat-value {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--amber);
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.825rem;
+      color: var(--text-secondary);
+      margin-top: 6px;
+    }
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-copy {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+    .footer-links a {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 150ms;
+    }
+    .footer-links a:hover { color: var(--text-secondary); }
+    @media (max-width: 640px) {
+      .hero { padding: 64px 0 48px; }
+      .stat-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 16px; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/" class="nav-brand">
+      <span class="nav-brand-icon">⚡</span>
+      PitchTrap
+    </a>
+    <div class="nav-links">
+      <a href="/demo" class="nav-link">Live Demo</a>
+      <a href="/onboarding" class="btn btn-primary btn-sm" style="margin-left:8px">Connect →</a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <section class="hero page-enter">
+      <div class="hero-eyebrow">Active Protection · BYOK · Multi-provider</div>
+      <div class="hero-headline">
+        <h1>Stop predatory pitches.<br>Start building evidence.</h1>
+      </div>
+      <p class="hero-sub">
+        PitchTrap automatically triages unsolicited business loan offers — flagging pressure tactics, engaging scammers with compliance questions, and capturing TCPA violation evidence your attorney can use.
+      </p>
+      <div class="hero-actions">
+        <a href="/demo" class="btn btn-primary btn-lg">Try the Live Demo →</a>
+        <a href="/onboarding" class="btn btn-secondary btn-lg">Connect Provider</a>
+      </div>
+    </section>
+
+    <div class="stat-row page-enter page-enter-delay-1">
+      <div class="stat">
+        <div class="stat-value">$1,500</div>
+        <div class="stat-label">Max TCPA statutory damages per violation</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">30s</div>
+        <div class="stat-label">Triage time — Ugly / Bad / Good classification</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">5</div>
+        <div class="stat-label">Compliance questions that expose unlicensed lenders</div>
+      </div>
+    </div>
+
+    <section class="feature-grid page-enter page-enter-delay-2">
+      <div class="feature-label">How it works</div>
+      <h2>Three levels. Zero tolerance.</h2>
+      <p class="feature-intro">Every inbound pitch is classified and handled automatically — no human attention required until there's money on the table.</p>
+      <div class="grid-3" style="margin-top:32px">
+        <div class="feature-card">
+          <div class="feature-icon">🚨</div>
+          <div class="feature-title">Level 1 — Triage</div>
+          <div class="feature-desc">Keyword and pattern analysis flags pressure language, free-email domains, and predatory signals in under 30 seconds.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <div class="feature-title">Level 2 — Engagement</div>
+          <div class="feature-desc">A bot asks five compliance questions — APR, license number, amortization schedule — that legitimate lenders can answer and scammers can't.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚖️</div>
+          <div class="feature-title">Level 3 — Evidence</div>
+          <div class="feature-desc">Call recordings, transcripts, and violation logs are packaged for contingency attorneys. One TCPA case can recover $500–$1,500 per call.</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;width:100%">
+      <span class="footer-copy">© 2026 PitchTrap. Built for small business owners who fight back.</span>
+      <div class="footer-links">
+        <a href="/demo">Demo</a>
+        <a href="/onboarding">Connect</a>
+        <a href="/dashboard">Dashboard</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

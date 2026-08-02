@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PitchTrap — Live Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .demo-layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 24px;
+      padding: 40px 0 64px;
+      align-items: start;
+    }
+    .demo-sidebar {
+      position: sticky;
+      top: 80px;
+    }
+    .samples-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .sample-btn {
+      width: 100%;
+      text-align: left;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      cursor: pointer;
+      margin-bottom: 8px;
+      line-height: 1.5;
+      transition: border-color 150ms var(--ease-out), color 150ms var(--ease-out);
+    }
+    .sample-btn:hover { border-color: var(--border-light); color: var(--text-primary); }
+    .sample-btn strong {
+      display: block;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+    .sample-btn.ugly strong  { color: var(--red); }
+    .sample-btn.bad strong   { color: var(--amber); }
+    .sample-btn.good strong  { color: var(--green); }
+    .terminal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .terminal-bar {
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .term-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .term-dot-r { background: #FF5F57; }
+    .term-dot-y { background: #FEBC2E; }
+    .term-dot-g { background: #28C840; }
+    .terminal-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-left: 6px;
+      font-family: var(--font-mono);
+    }
+    .terminal-body {
+      flex: 1;
+      padding: 20px;
+      min-height: 380px;
+      overflow-y: auto;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.75;
+    }
+    .msg { margin-bottom: 4px; }
+    .msg-user {
+      color: var(--text-secondary);
+    }
+    .msg-user::before { content: '> '; color: var(--text-muted); }
+    .msg-bot { color: var(--text-primary); }
+    .msg-bot::before { content: '⚡ '; color: var(--amber); }
+    .msg-verdict-ugly  { color: var(--red);   font-weight: 600; }
+    .msg-verdict-bad   { color: var(--amber); font-weight: 600; }
+    .msg-verdict-good  { color: var(--green); font-weight: 600; }
+    .msg-verdict-ugly::before,
+    .msg-verdict-bad::before,
+    .msg-verdict-good::before { content: '▸ '; }
+    .msg-system {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+    .msg-system::before { content: '# '; }
+    .terminal-footer {
+      border-top: 1px solid var(--border);
+      padding: 12px 16px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .terminal-input {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      outline: none;
+      height: 42px;
+      transition: border-color 150ms;
+    }
+    .terminal-input:focus { border-color: var(--amber); box-shadow: 0 0 0 3px var(--amber-glow); }
+    .terminal-input::placeholder { color: var(--text-muted); }
+    .typing {
+      display: inline-block;
+      opacity: 0.5;
+    }
+    .typing::after {
+      content: '▋';
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    @media (max-width: 768px) {
+      .demo-layout {
+        grid-template-columns: 1fr;
+        padding: 24px 0 48px;
+      }
+      .demo-sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/" class="nav-brand">
+      <span class="nav-brand-icon">⚡</span>
+      PitchTrap
+    </a>
+    <div class="nav-links">
+      <a href="/" class="nav-link">← Home</a>
+      <a href="/onboarding" class="btn btn-primary btn-sm" style="margin-left:8px">Connect →</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="demo-layout">
+
+      <!-- Sidebar: sample pitches -->
+      <div class="demo-sidebar page-enter">
+        <div style="margin-bottom:24px">
+          <h3>Live Demo</h3>
+          <p class="text-muted mt-8" style="font-size:0.85rem;line-height:1.65">Paste any funding pitch below, or load a sample. PitchTrap classifies it and engages in real time.</p>
+        </div>
+
+        <div class="samples-label">Sample pitches</div>
+
+        <button class="sample-btn ugly" onclick="loadSample('ugly')">
+          <strong>🚨 Ugly — reject immediately</strong>
+          "PRE-APPROVED $250k! Offer expires TODAY! No credit check, guaranteed funding, cash in 24 hours…"
+        </button>
+
+        <button class="sample-btn bad" onclick="loadSample('bad')">
+          <strong>⚠️ Bad — engage & probe</strong>
+          "1.35 factor rate, daily ACH of $412, merchant cash advance from Fast Cash Capital…"
+        </button>
+
+        <button class="sample-btn good" onclick="loadSample('good')">
+          <strong>✅ Good — pass to review</strong>
+          "Term sheet: $120k, 36 monthly payments, APR 12.4%, full amortization schedule available…"
+        </button>
+
+        <div class="divider"></div>
+
+        <p class="text-xs text-muted" style="line-height:1.65">
+          This demo runs the same triage engine used on live calls. No telephony credentials required.
+        </p>
+
+        <button class="btn btn-ghost btn-sm" style="margin-top:12px;width:100%" onclick="resetDemo()">Reset session</button>
+      </div>
+
+      <!-- Terminal -->
+      <div class="terminal page-enter page-enter-delay-1">
+        <div class="terminal-bar">
+          <span class="term-dot term-dot-r"></span>
+          <span class="term-dot term-dot-y"></span>
+          <span class="term-dot term-dot-g"></span>
+          <span class="terminal-label">pitchtrap — triage engine v1</span>
+        </div>
+
+        <div class="terminal-body" id="log">
+          <div class="msg msg-system">PitchTrap triage engine ready.</div>
+          <div class="msg msg-system">Paste a pitch offer below and press Enter.</div>
+        </div>
+
+        <div class="terminal-footer">
+          <textarea class="terminal-input" id="input" rows="1"
+            placeholder="Paste or type a pitch offer…"
+            onkeydown="handleKey(event)"
+            oninput="autoResize(this)"></textarea>
+          <button class="btn btn-primary" onclick="send()">Send</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const log   = document.getElementById('log');
+    const input = document.getElementById('input');
+    let sessionId = 'demo-' + Math.random().toString(36).slice(2);
+
+    const samples = {
+      ugly: "PRE-APPROVED $250k! Offer expires TODAY! No credit check, guaranteed funding, bad credit OK, cash in 24 hours — no paperwork required.",
+      bad:  "1.35 factor rate, daily ACH of $412 from your account, merchant cash advance from Fast Cash Capital — quick capital, rapid funding available now.",
+      good: "Term sheet: $120,000 at 12.4% APR, 36 monthly payments of $3,995, full amortization schedule attached, total repayment $143,820."
+    };
+
+    function append(text, cls) {
+      const el = document.createElement('div');
+      el.className = 'msg ' + (cls || '');
+      el.textContent = text;
+      log.appendChild(el);
+      log.scrollTop = log.scrollHeight;
+      return el;
+    }
+
+    function loadSample(type) {
+      input.value = samples[type];
+      autoResize(input);
+      input.focus();
+    }
+
+    function handleKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+    }
+
+    function autoResize(el) {
+      el.style.height = 'auto';
+      el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+    }
+
+    async function send() {
+      const text = input.value.trim();
+      if (!text) return;
+      append(text, 'msg-user');
+      input.value = '';
+      autoResize(input);
+
+      const typing = append('', 'msg-system typing');
+
+      try {
+        const res = await fetch('/demo/turn', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ session_id: sessionId, text })
+        });
+        const data = await res.json();
+        log.removeChild(typing);
+
+        if (data.verdict) {
+          const cls = 'msg-verdict-' + data.verdict.toLowerCase();
+          append(`VERDICT: ${data.verdict.toUpperCase()} (confidence: ${Math.round((data.confidence||0)*100)}%) — ${(data.reasons||[]).join('; ')}`, cls);
+        }
+        if (data.message) {
+          append(data.message, 'msg-bot');
+        }
+        if (data.finished) {
+          append('Session complete. Evidence log ready.', 'msg-system');
+        }
+      } catch(e) {
+        log.removeChild(typing);
+        append('Error: ' + e.message, 'msg-system');
+      }
+    }
+
+    async function resetDemo() {
+      try {
+        await fetch('/demo/turn', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ session_id: sessionId, reset: true })
+        });
+      } catch(e) {}
+      log.innerHTML = '';
+      append('Session reset.', 'msg-system');
+      append('Paste a new pitch offer below and press Enter.', 'msg-system');
+      sessionId = 'demo-' + Math.random().toString(36).slice(2);
+    }
+  </script>
+</body>
+</html>

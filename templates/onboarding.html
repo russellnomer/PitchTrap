@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PitchTrap — Connect Provider</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .onboarding-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      padding: 64px 0;
+      align-items: start;
+    }
+    .onboarding-sidebar {
+      position: sticky;
+      top: 80px;
+    }
+    .sidebar-title {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .provider-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .provider-option {
+      position: relative;
+    }
+    .provider-option input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .provider-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: border-color 150ms var(--ease-out), background 150ms var(--ease-out);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+    .provider-label:hover {
+      border-color: var(--border-light);
+      color: var(--text-primary);
+    }
+    .provider-option input:checked + .provider-label {
+      border-color: var(--amber);
+      background: var(--amber-glow);
+      color: var(--amber);
+    }
+    .provider-logo {
+      font-size: 22px;
+      line-height: 1;
+    }
+    .fields-panel {
+      display: none;
+    }
+    .fields-panel.active {
+      display: block;
+    }
+    .byok-note {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--amber);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      font-size: 0.825rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .byok-note strong { color: var(--text-primary); }
+    @media (max-width: 768px) {
+      .onboarding-layout {
+        grid-template-columns: 1fr;
+        padding: 40px 0;
+      }
+      .onboarding-sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/" class="nav-brand">
+      <span class="nav-brand-icon">⚡</span>
+      PitchTrap
+    </a>
+    <div class="nav-links">
+      <a href="/" class="nav-link">← Back</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="onboarding-layout">
+
+      <!-- Left: steps sidebar -->
+      <div class="onboarding-sidebar page-enter">
+        <div class="sidebar-title">Activation steps</div>
+        <div class="steps">
+          <div class="step step-active">
+            <div class="step-content">
+              <div class="step-title">Connect your provider</div>
+              <div class="step-desc">Paste your Twilio or SignalWire keys. We validate them live — no guessing.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-content">
+              <div class="step-title">Activate subscription</div>
+              <div class="step-desc">One-time setup fee + monthly plan. Cancel anytime.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-content">
+              <div class="step-title">Attach a phone number</div>
+              <div class="step-desc">Point your business number's webhook at your PitchTrap URL.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-content">
+              <div class="step-title">Let it run</div>
+              <div class="step-desc">Triage runs automatically. Check your evidence vault when violations accumulate.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <p class="text-sm text-muted" style="line-height:1.7">
+          <strong style="color:var(--text-secondary)">BYOK means your data stays yours.</strong><br>
+          PitchTrap never stores call audio on our servers. Your provider account holds the recordings — we hold the triage logic.
+        </p>
+      </div>
+
+      <!-- Right: form -->
+      <div class="page-enter page-enter-delay-1">
+        <h2>Connect your provider</h2>
+        <p class="text-muted mt-8" style="font-size:0.9rem">Your Twilio or SignalWire credentials stay encrypted in your account. We use them only to validate keys and route webhooks.</p>
+
+        <div class="divider"></div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ 'success' if category == 'success' else 'error' }}" style="margin-bottom:16px">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <div class="byok-note">
+          <strong>Bring Your Own Keys.</strong> You pay Twilio or SignalWire directly for call minutes. PitchTrap charges only for the triage software — never a markup on telephony.
+        </div>
+
+        <form method="POST" action="/onboarding/connect">
+
+          <div class="provider-toggle">
+            <div class="provider-option">
+              <input type="radio" id="p-twilio" name="provider" value="twilio" checked onchange="showFields('twilio')">
+              <label for="p-twilio" class="provider-label">
+                <span class="provider-logo">📞</span>
+                Twilio
+              </label>
+            </div>
+            <div class="provider-option">
+              <input type="radio" id="p-sw" name="provider" value="signalwire" onchange="showFields('signalwire')">
+              <label for="p-sw" class="provider-label">
+                <span class="provider-logo">🔌</span>
+                SignalWire
+              </label>
+            </div>
+          </div>
+
+          <!-- Twilio fields -->
+          <div id="fields-twilio" class="fields-panel active">
+            <div class="form-group">
+              <label for="account_sid">Account SID</label>
+              <input type="text" id="account_sid" name="account_sid" placeholder="ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label for="auth_token">Auth Token</label>
+              <input type="password" id="auth_token" name="auth_token" placeholder="Your auth token">
+            </div>
+          </div>
+
+          <!-- SignalWire fields -->
+          <div id="fields-signalwire" class="fields-panel">
+            <div class="form-group">
+              <label for="project_id">Project ID</label>
+              <input type="text" id="project_id" name="project_id" placeholder="Your project UUID" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label for="api_token">API Token</label>
+              <input type="password" id="api_token" name="api_token" placeholder="Your API token">
+            </div>
+            <div class="form-group">
+              <label for="space_url">Space URL</label>
+              <input type="text" id="space_url" name="space_url" placeholder="yourspace.signalwire.com">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width:100%;margin-top:24px">
+            Validate & Connect Keys →
+          </button>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function showFields(provider) {
+      document.querySelectorAll('.fields-panel').forEach(el => el.classList.remove('active'));
+      document.getElementById('fields-' + provider).classList.add('active');
+    }
+  </script>
+</body>
+</html>
